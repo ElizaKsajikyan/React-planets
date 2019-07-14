@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-
+import SwapiService from '../../services/SwapiService'
 import Header from '../Header';
 import Slider from '../Slider';
 import Sidebar from '../Sidebar';
@@ -9,15 +9,27 @@ import './App.css';
 
 export default class App extends Component {
     state = {
-        id: 3,
+        id: '',
         removeShow: true
     };
-    getItem = async(id) => {
-        let idPlanet= await id;
+    result = new SwapiService();
+
+    componentDidMount() {
+        this.getFirstPlanetId()
+    }
+
+    getFirstPlanetId = async () => {
+        const planet = await this.result.getPlanets();
         this.setState({
-            id:idPlanet
+            id: planet[0].id
+        })
+    }
+
+    getItem = async (id) => {
+        let idPlanet = await id;
+        this.setState({
+            id: idPlanet
         });
-        // console.log(this.state.id,"id")
     };
     showPlanet = true;
     removePlanet = () => {
@@ -30,7 +42,7 @@ export default class App extends Component {
     render() {
         const {removeShow} = this.state;
         const showContent = removeShow ? <Slider/> : null;
-
+        const main = this.state.id ?  <Main planetId={this.state.id}/>: ''
         return (
             <div className="App wrapper">
                 <header className="App-header">
@@ -45,7 +57,7 @@ export default class App extends Component {
                 <div className="d-flex align-items-start container">
                     <Sidebar planet={
                         this.getItem}/>
-                    <Main planetId={this.state.id}/>
+                    {main}
                 </div>
             </div>
         );

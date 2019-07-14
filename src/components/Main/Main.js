@@ -8,41 +8,51 @@ export  default  class Main extends Component {
 
     state = {
         planet: {},
-
     };
-    constructor({planetId}){
+
+    constructor({planetId}) {
         super();
         this.state = {planetId};
-        console.log(this.state)
+        this.getFirstPlanet(planetId);
     }
-    componentWillReceiveProps(planetId) {
-        this.setState({
-            planetId: this.props.planetId
-        });
-    }
+
     componentDidMount() {
-        this.selectPlanet(this.state.planetId);
+
     }
 
     result = new SwapiService();
 
-    selectPlanet = (planetId) => {
-        // console.log(planetId);
-        const planet = this.result.getPlanet(planetId);
+    selectPlanet = async (planetId) => {
+        const planet = await this.result.getPlanet(planetId);
         this.setState({
-            planet: planet
+            planet: planet,
+            id: planetId
         });
-        console.log(this.state.planet)
+    }
+    getFirstPlanet = async (planetId) => {
+        const planet = await this.result.getPlanet(planetId);
+        this.setState({
+            planet,
+        })
+
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.planetId !==prevProps.planetId) {
+            this.setState({
+                planetId: this.props.planetId
+            });
+
+            this.selectPlanet(this.state.planetId);
+        }
+    }
 
     render() {
-
-        const {planet} = this.state;
-
+        const name = this.state.planet ? this.state.planet.name : '';
+        console.log(this.state.planetId);
         return (
             <div className="jumbotron ">
-                <h1 className="display-3">name</h1>
+                <h1 className="display-3">{name}</h1>
                 <p className="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra
                     attention to featured content or information.</p>
                 <hr className="my-4"/>
