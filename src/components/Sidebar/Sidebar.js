@@ -10,7 +10,7 @@ export default class Sidebar extends Component {
         this.getPlanets()
     }
 
-    _swapiService = new SwapiService()
+    _swapiService = new SwapiService();
 
     result = new SwapiService();
 
@@ -25,17 +25,17 @@ export default class Sidebar extends Component {
             planets,
             isLoading:false
         })
-    }
+    };
     getPlanetId = (id) => {
         this.setState(id);
         return this.props.planet(id)
-    }
+    };
     getPlanetsItems = () => {
         const {planets} = this.state;
         if (planets.length) {
             return planets.map((planet, i) => {
                 let classes = "list-group-item d-flex justify-content-between align-items-center";
-                const activeClass = !i ? ' active' : '';
+                const activeClass = !i  ? ' active' : '';
                 classes += activeClass;
                 return (
                     <li className={classes} key={planet.id} onClick={() => {
@@ -48,7 +48,7 @@ export default class Sidebar extends Component {
         } else {
             return null
         }
-    }
+    };
 
     render() {
         const {isLoading} =this.state;
