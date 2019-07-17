@@ -9,27 +9,18 @@ import './App.css';
 
 export default class App extends Component {
     state = {
-        id: null,
-        starId:null,
-        removeShow: true
+        id: 3,
+        starId: 3,
+        removeShow: true,
+        oldId: null,
+        change:false
     };
     result = new SwapiService();
 
-    // componentDidMount() {
-    //     this.getFirstPlanetId()
-    // }
-    //
-    // getFirstPlanetId = async () => {
-    //     const planet = await this.result.getPlanets();
-    //     this.setState({
-    //         id: planet[0].id
-    //     })
-    // }
 
     getItem = async (id) => {
-        let idPlanet = id;
         this.setState({
-            id: idPlanet
+            starId: id
         });
     };
     showPlanet = true;
@@ -39,20 +30,45 @@ export default class App extends Component {
             removeShow: this.showPlanet
         })
     };
-    getStarId=(id)=>{
-        this.setState({
-            starId: id
-        });
-    }
+    getStarId = async (id) => {
+        let starId = id;
+        await  this.setState({
+            oldId: this.state.starId,
+            starId: starId,
+            change:true
+        })
 
-    onStarData = () => {
+    };
+
+    onStarData = (metod) => {
+        console.log(this.state.starId)
+        metod(this.state.starId)
         // const {starId} = this.state;
-    }
-    render() {
-        console.log(this.state.id);
-        const {removeShow,starId} = this.state;
-        const showContent = removeShow ? <Slider/> : null;
 
+    }
+
+    // update = () => {
+    //     const {starId, oldId} = this.state;
+    //     console.log(this.state.oldId, this.state.starId)
+    //     if (oldId===null || oldId !== starId) {
+    //         return (
+    //             <Main planetId={this.state.id} starId={starId} metpd={ this.onStarData}/>
+    //         )
+    //     }
+    // }
+
+    render() {
+        const     update = () => {
+            const {starId, oldId} = this.state;
+            if (oldId !== starId) {
+                console.log(oldId, starId)
+                return (
+                    <Main planetId={this.state.id} starId={starId} metpd={ this.onStarData}/>
+                )
+            }
+        }
+        const {removeShow} = this.state;
+        const showContent = removeShow ? <Slider/> : null;
         return (
             <div className="App wrapper">
                 <header className="App-header">
@@ -65,11 +81,8 @@ export default class App extends Component {
                     </article>
                 </section>
                 <div className="d-flex align-items-start container">
-                    <Sidebar planet={
-                        this.getItem} getStarId={this.getStarId}/>
-                    <Main planetId={this.state.id} starId={starId} metpd={(data)=>{
-                        this.onStarData(data)
-                    }}/>
+                    <Sidebar getStarId={this.getStarId}/>
+                    {update()}
                 </div>
             </div>
         );

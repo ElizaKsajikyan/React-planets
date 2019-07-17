@@ -8,7 +8,8 @@ export default class Main extends Component {
 
     state = {
         planet: {},
-        star: {}
+        star: {},
+        starId: null
     };
     result = new SwapiService();
 
@@ -17,31 +18,32 @@ export default class Main extends Component {
         // console.log(this.props.planetId);
         // this.getFirstPlanet(this.props.planetId);
         // this.getStar()
-        this.props.onStarData(this.getStar())
+        this.props.metpd(this.getStar)
     }
 
 
-    getStar(starId) {
+    getStar = async(starId) => {
         alert();
-        // const star = this.result.getStar(starId)
-        // this.setState({
-        //     star
-        // })
+        console.log(starId)
+        let id = await starId;
+          this.setState = ({
+            starId:await id
+        })
+          console.log(this.state.starId)
+    }
+
+    componentDidUpdate() {
+
     }
 
     render() {
         const {star: {name, model, starship_class}} = this.state;
         return (
-            <div className="jumbotron ">
+            <div className="jumbotron col">
                 <h1 className="display-3">Name: {name}</h1>
-                <p className="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra
-                    attention to featured content or information.</p>
+                <p className="lead">starship_class:{starship_class}</p>
                 <hr className="my-4"/>
-                <p>It uses utility classes for typography and spacing to space content out within the larger
-                    container.</p>
-                <p className="lead">
-                    <a className="btn btn-primary btn-lg" href="../a" role="button">Learn more</a>
-                </p>
+                <p>model:{model}</p>
             </div>
 
         )
