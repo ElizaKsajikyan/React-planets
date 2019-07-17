@@ -7,7 +7,8 @@ import './Sidebar.css';
 
 export default class Sidebar extends Component {
     componentDidMount() {
-        this.getPlanets()
+        this.getPlanets();
+        this.getStars()
     }
 
     _swapiService = new SwapiService();
@@ -16,6 +17,7 @@ export default class Sidebar extends Component {
 
     state = {
         planets: [],
+        stars:[],
         id: null,
         isLoading: true,
     };
@@ -30,6 +32,14 @@ export default class Sidebar extends Component {
         this.setState(id);
         return this.props.planet(id)
     };
+
+    getStars=async ()=>{
+        const stars = await this._swapiService.getStars();
+        this.setState({
+            stars,
+            isLoading:false
+        })
+    }
     getPlanetsItems = () => {
         const {planets} = this.state;
         if (planets.length) {
@@ -49,10 +59,30 @@ export default class Sidebar extends Component {
             return null
         }
     };
+    getStarsItem= () => {
+        const {getStarId}=this.props
+        const {stars} = this.state;
+        if (stars.length) {
+            return stars.map((star, i) => {
+                let classes = "list-group-item d-flex justify-content-between align-items-center";
+                const activeClass = !i  ? ' active' : '';
+                classes += activeClass;
+                return (
+                    <li className={classes} key={star.id} onClick={()=>{
+                        getStarId(star.id)
+                    }}>
+                        {star.name}
+                    </li>
+                )
+            })
+        } else {
+            return null
+        }
+    };
 
     render() {
         const {isLoading} =this.state;
-        const loading = isLoading ? <Loading/> : this.getPlanetsItems();
+        const loading = isLoading ? <Loading/> : this.getStarsItem();
 
         return (
             <div className='col-md-3'>

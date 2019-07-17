@@ -5,22 +5,22 @@ export default class SwapiService {
     async _getData(url) {
         try {
             const data = await fetch(`${this._baseUrl}${url}`);
-            if(!data.ok){
+            if (!data.ok) {
                 throw new Error(`tatus code:${data.status}`)
             }
             return await data.json();
 
-        } catch(error){
+        } catch (error) {
             console.log(error);
         }
     }
 
-    _transformPlanetData(obj){
+    _transformPlanetData(obj) {
         const id = obj.url.match(/\/([0-9]*)\/$/)[1];
         return {
             climate: obj.climate,
             created: obj.created,
-            diameter:obj.diameter,
+            diameter: obj.diameter,
             edited: obj.edited,
             films: obj.films,
             gravity: obj.gravity,
@@ -28,14 +28,15 @@ export default class SwapiService {
             orbital_period: obj.orbital_period,
             population: obj.population,
             residents: obj.residents,
-            rotation_period:obj.rotation_period,
+            rotation_period: obj.rotation_period,
             surface_water: obj.surface_water,
             terrain: obj.terrain,
             url: obj.url,
             id: id
         }
     }
-    _transformUserData(obj){
+
+    _transformUserData(obj) {
         return {
             birth_year: obj.birth_year,
             created: obj.created,
@@ -43,7 +44,7 @@ export default class SwapiService {
             eye_color: obj.eye_color,
             films: obj.films,
             gender: obj.gender,
-            hair_color:obj.hair_color,
+            hair_color: obj.hair_color,
             height: obj.height,
             homeworld: obj.homeworld,
             mass: obj.mass,
@@ -56,27 +57,30 @@ export default class SwapiService {
         }
     }
 
-    _transformStarData(obj){
-            return {
-                M: obj.MGLT,
-                cargo_capacity: obj.cargo_capacity,
-                consumables: obj.consumables,
-                cost_in_credits: obj.cost_in_credits,
-                created: obj.created,
-                crew: obj.crew,
-                edited: obj.edited,
-                hyperdrive_rating: obj.hyperdrive_rating,
-                length: obj.length,
-                manufacturer: obj.manufacturer,
-                max_atmosphering_speed: obj.max_atmosphering_speed,
-                model: obj.model,
-                name: obj.name,
-                passengers: obj.passengers,
-                films: obj.films,
-                pilots: obj.pilots,
-                starship_class: obj.starship_class,
-                url: obj.url
-            }
+    _transformStarData(obj) {
+        let id = null;
+        if (obj.url) id = obj.url.match(/\/([0-9]*)\/$/)[1]
+        return {
+            M: obj.MGLT,
+            cargo_capacity: obj.cargo_capacity,
+            consumables: obj.consumables,
+            cost_in_credits: obj.cost_in_credits,
+            created: obj.created,
+            crew: obj.crew,
+            edited: obj.edited,
+            hyperdrive_rating: obj.hyperdrive_rating,
+            length: obj.length,
+            manufacturer: obj.manufacturer,
+            max_atmosphering_speed: obj.max_atmosphering_speed,
+            model: obj.model,
+            name: obj.name,
+            passengers: obj.passengers,
+            films: obj.films,
+            pilots: obj.pilots,
+            starship_class: obj.starship_class,
+            url: obj.url,
+            id
+        }
     }
 
     async getPlanet(id) {
@@ -108,7 +112,7 @@ export default class SwapiService {
 
     async getStars() {
         const result = await this._getData(`starships`);
-        return  result.results.map(this._transformStarData)
+        return result.results.map(this._transformStarData)
 
     }
 }

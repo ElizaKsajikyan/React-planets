@@ -9,24 +9,25 @@ import './App.css';
 
 export default class App extends Component {
     state = {
-        id: '',
+        id: null,
+        starId:null,
         removeShow: true
     };
     result = new SwapiService();
 
-    componentDidMount() {
-        this.getFirstPlanetId()
-    }
-
-    getFirstPlanetId = async () => {
-        const planet = await this.result.getPlanets();
-        this.setState({
-            id: planet[0].id
-        })
-    }
+    // componentDidMount() {
+    //     this.getFirstPlanetId()
+    // }
+    //
+    // getFirstPlanetId = async () => {
+    //     const planet = await this.result.getPlanets();
+    //     this.setState({
+    //         id: planet[0].id
+    //     })
+    // }
 
     getItem = async (id) => {
-        let idPlanet = await id;
+        let idPlanet = id;
         this.setState({
             id: idPlanet
         });
@@ -38,11 +39,20 @@ export default class App extends Component {
             removeShow: this.showPlanet
         })
     };
+    getStarId=(id)=>{
+        this.setState({
+            starId: id
+        });
+    }
 
+    onStarData = () => {
+        // const {starId} = this.state;
+    }
     render() {
-        const {removeShow} = this.state;
+        console.log(this.state.id);
+        const {removeShow,starId} = this.state;
         const showContent = removeShow ? <Slider/> : null;
-        const main = this.state.id ?  <Main planetId={this.state.id}/>: ''
+
         return (
             <div className="App wrapper">
                 <header className="App-header">
@@ -56,8 +66,10 @@ export default class App extends Component {
                 </section>
                 <div className="d-flex align-items-start container">
                     <Sidebar planet={
-                        this.getItem}/>
-                    {main}
+                        this.getItem} getStarId={this.getStarId}/>
+                    <Main planetId={this.state.id} starId={starId} metpd={(data)=>{
+                        this.onStarData(data)
+                    }}/>
                 </div>
             </div>
         );

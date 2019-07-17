@@ -2,57 +2,38 @@ import React, {Component} from 'react';
 
 import SwapiService from '../../services/SwapiService'
 
-import  './Main.css';
+import './Main.css';
 
-export  default  class Main extends Component {
+export default class Main extends Component {
 
     state = {
         planet: {},
+        star: {}
     };
-
-    constructor({planetId}) {
-        super();
-        this.state = {planetId};
-        this.getFirstPlanet(planetId);
-    }
-
-    componentDidMount() {
-
-    }
-
     result = new SwapiService();
 
-    selectPlanet = async (planetId) => {
-        const planet = await this.result.getPlanet(planetId);
-        this.setState({
-            planet: planet,
-            id: planetId
-        });
-    }
-    getFirstPlanet = async (planetId) => {
-        const planet = await this.result.getPlanet(planetId);
-        this.setState({
-            planet,
-        })
 
+    componentDidMount() {
+        // console.log(this.props.planetId);
+        // this.getFirstPlanet(this.props.planetId);
+        // this.getStar()
+        this.props.onStarData(this.getStar())
     }
 
-    componentDidUpdate(prevProps) {
-        if (this.props.planetId !==prevProps.planetId) {
-            this.setState({
-                planetId: this.props.planetId
-            });
 
-            this.selectPlanet(this.state.planetId);
-        }
+    getStar(starId) {
+        alert();
+        // const star = this.result.getStar(starId)
+        // this.setState({
+        //     star
+        // })
     }
 
     render() {
-        const name = this.state.planet ? this.state.planet.name : '';
-        console.log(this.state.planetId);
+        const {star: {name, model, starship_class}} = this.state;
         return (
             <div className="jumbotron ">
-                <h1 className="display-3">{name}</h1>
+                <h1 className="display-3">Name: {name}</h1>
                 <p className="lead">This is a simple hero unit, a simple jumbotron-style component for calling extra
                     attention to featured content or information.</p>
                 <hr className="my-4"/>
